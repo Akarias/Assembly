@@ -8,6 +8,8 @@ using Blamite.IO;
 using Blamite.RTE;
 using Blamite.Util;
 using System.Windows.Input;
+using Antlr4.Runtime.Misc;
+using System.Diagnostics;
 
 namespace Assembly.Metro.Controls.PageTemplates.Games.Components
 {
@@ -51,16 +53,15 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components
 			_rteProvider = rteProvider;
 			_stringIDTrie = stringIDTrie;
 
-			tbMetaEditors.SelectedIndex = (int) App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor;
+			tbMetaEditors.SelectedIndex = (int)App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor;
 
 			// Create Meta Information Tab
 			//_metaInformation = new MetaInformation(_buildInfo, _tag, _cache);
 			//tabTagInfo.Content = _metaInformation;
-			if (App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor ==
-				Settings.LastMetaEditorType.Info)
-				tbMetaEditors.SelectedIndex =
-					(int)Settings.LastMetaEditorType.MetaEditor;
-
+			//if (App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor == Settings.LastMetaEditorType.Info)
+			//{
+			//	tbMetaEditors.SelectedIndex = (int)Settings.LastMetaEditorType.MetaEditor;
+			//}
 
 			// Create Meta Editor Tab
 			_metaEditor = new MetaEditor(_buildInfo, _tag, this, _tags, _cache, _streamManager, _rteProvider, _stringIDTrie);
@@ -98,12 +99,28 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components
 			//else
 			{
 				tabSoundEditor.Visibility = Visibility.Collapsed;
-				if (App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor == 
+				if (App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor ==
 					Settings.LastMetaEditorType.Sound)
-					tbMetaEditors.SelectedIndex = 
+					tbMetaEditors.SelectedIndex =
 						(int)Settings.LastMetaEditorType.MetaEditor;
 			}
 
+			#endregion
+
+			#region Bitmaps
+			if (_tag.RawTag.Group.Magic == CharConstant.FromString("bitm"))
+			{
+				tabBitmapEditor.Visibility = Visibility.Visible;
+				tabBitmapEditor.Content = new BitmapEditor(_buildInfo, _cacheLocation, _tag, _cache, _streamManager);
+			}
+			else
+			{
+				tabBitmapEditor.Visibility = Visibility.Collapsed;
+				if (App.AssemblyStorage.AssemblySettings.HalomapLastSelectedMetaEditor == Settings.LastMetaEditorType.Bitmap)
+				{
+					tbMetaEditors.SelectedIndex = (int)Settings.LastMetaEditorType.MetaEditor;
+				}
+			}
 			#endregion
 		}
 
@@ -118,10 +135,10 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components
 			tbMetaEditors.SelectedItem = tabMetaEditor;
 		}
 
-        public void RefreshMetaEditor()
-        {
-            _metaEditor.RefreshEditor(MetaData.MetaReader.LoadType.File);
-        }
+		public void RefreshMetaEditor()
+		{
+			_metaEditor.RefreshEditor(MetaData.MetaReader.LoadType.File);
+		}
 
 		public void LoadNewTagEntry(TagEntry tag)
 		{
