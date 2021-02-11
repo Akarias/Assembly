@@ -41,6 +41,7 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components.Editors
 		private readonly string _cacheLocation;
 		private readonly IStreamManager _streamManager;
 		private ResourceTable resourceTable;
+		private DataBlockBuilder bitmapTagData;
 		private List<byte[]> processedPages = new List<byte[]>();
 
 		public BitmapEditor(EngineDescription buildInfo, string cacheLocation, TagEntry tag, ICacheFile cache, IStreamManager streamManager)
@@ -59,14 +60,14 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components.Editors
 
 		public void RefreshBitmapDisplay()
 		{
-			GetPages(_tag.RawTag);
+			ProcessTag(_tag.RawTag);
 		}
 
-		public void GetPages(ITag bitmapTag)
+		public void ProcessTag(ITag bitmapTag)
 		{
 			// I don't feel like writing structure definitions, poaching extraction code
 			// #TODO: Wrap all of this up under a neat function for other uses
-
+			bitmapTagData = null;
 			processedPages.Clear();
 
 			string groupName = VariousFunctions.SterilizeTagGroupName(CharConstant.ToString(bitmapTag.Group.Magic)).Trim();
@@ -83,7 +84,6 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components.Editors
 				return;
 			}
 
-			DataBlockBuilder bitmapTagData;
 			using (IReader reader = _streamManager.OpenRead())
 			{
 				bitmapTagData = new DataBlockBuilder(reader, bitmapTag, _cache, _buildInfo);
@@ -189,7 +189,7 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components.Editors
 			SaveFileDialog sfd = new SaveFileDialog
 			{
 				Title = "Save Tag List",
-				Filter = "Text Files|*.txt|Tag Lists|*.taglist|All Files|*.*"
+				Filter = "Bin File|*.bin|All Files|*.*"
 			};
 			bool? result = sfd.ShowDialog();
 			if (!result.Value)
