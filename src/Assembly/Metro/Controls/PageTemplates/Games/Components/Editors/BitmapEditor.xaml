@@ -5,9 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="1000">
-	<Grid>
-		<Grid Height="600" Width="1000" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-			<TextBlock x:Name="txtTagName" Text="data\bitmaps\bcs\mandrill\mandrill_logo" Foreground="#FFC1C1C1" Margin="10,558,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontFamily="{DynamicResource MetroFontLight}" />
-		</Grid>
+	<Grid Height="600" Width="1000" HorizontalAlignment="Left" VerticalAlignment="Top">
+		<TextBlock x:Name="txtTagName" Text="data\bitmaps\bcs\mandrill\mandrill_logo" Foreground="#FFC1C1C1" Margin="10,558,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontFamily="{DynamicResource MetroFontLight}" />
+		<StackPanel Margin="535,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="99">
+			<TextBlock Style="{DynamicResource GenericTextblock}" Text="Bitmap Controls" FontSize="25" Opacity="0.3" />
+			<Button x:Name="btnPreviewBitmap" Content="Preview Bitmap" Click="btnPreviewBitmap_Click" />
+			<Button x:Name="btnExtractBitmap" Content="Extract Bitmap" Click="btnExtractBitmap_Click" />
+			<Button x:Name="btnDumpRaw" Content="Dump Raw Pages" Click="btnDumpRaw_Click" />
+		</StackPanel>
+		<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="520" Margin="10,10,0,0" VerticalAlignment="Top" Width="520">
+			<Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="500" Width="500" Margin="9,9,0,0"/>
+		</Border>
 	</Grid>
 </UserControl>
