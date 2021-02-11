@@ -9,6 +9,7 @@ using Blamite.IO;
 using Blamite.Plugins;
 using Blamite.Serialization;
 using Blamite.Util;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -185,7 +186,20 @@ namespace Assembly.Metro.Controls.PageTemplates.Games.Components.Editors
 
 		private void btnDumpRaw_Click(object sender, RoutedEventArgs e)
 		{
+			SaveFileDialog sfd = new SaveFileDialog
+			{
+				Title = "Save Tag List",
+				Filter = "Text Files|*.txt|Tag Lists|*.taglist|All Files|*.*"
+			};
+			bool? result = sfd.ShowDialog();
+			if (!result.Value)
+				return;
 
+			using (StreamWriter writer = new StreamWriter(sfd.FileName))
+			{
+				byte[] allPages = processedPages.SelectMany(i => i).ToArray();
+				writer.BaseStream.Write(allPages, 0, allPages.Length);
+			}
 		}
 	}
 }
